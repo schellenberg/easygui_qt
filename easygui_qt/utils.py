@@ -2,10 +2,11 @@
 import collections
 import os
 import sys
+
 try:
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtGui, QtCore, QtWidgets
 except ImportError:
-    from PyQt5 import QtGui, QtCore  # untested
+    print("Error importing PyQt5. Have you installed it?")
 
 if sys.version_info >= (3,):
     unicode = str
@@ -28,8 +29,8 @@ def create_page(page, parent=None):
        :param page: an interable containing tuples of names of special widget
                     to position as well as their value.
        """
-    new_page = QtGui.QWidget()
-    layout = QtGui.QVBoxLayout()
+    new_page = QtWidgets.QWidget()
+    layout = QtWidgets.QVBoxLayout()
     for kind, value in page:
         if kind.lower() == "text":
             add_text_to_layout(layout, value)
@@ -53,13 +54,13 @@ def create_page(page, parent=None):
 
 def add_text_to_layout(layout, text):
     '''adds some text, as a QLabel, to a layout'''
-    label = QtGui.QLabel(text)
+    label = QtWidgets.QLabel(text)
     label.setWordWrap(True)
     layout.addWidget(label)
 
 def add_image_to_layout(layout, image_file_name):
     '''adds an image, as a QLabel, to a layout'''
-    label =  QtGui.QLabel()
+    label =  QtWidgets.QLabel()
     pixmap =  QtGui.QPixmap(image_file_name)
     label.setPixmap(pixmap)
     layout.addWidget(label)
@@ -67,8 +68,8 @@ def add_image_to_layout(layout, image_file_name):
 def add_list_of_images_to_layout(layout, images):
     ''' adds a list of images shown in a horizontal layout to an
         already existing layout'''
-    h_layout = QtGui.QHBoxLayout()
-    h_box = QtGui.QGroupBox('')
+    h_layout = QtWidgets.QHBoxLayout()
+    h_box = QtWidgets.QGroupBox('')
     for image in images:
         add_image_to_layout(h_layout, image)
     h_box.setLayout(h_layout)
@@ -77,11 +78,11 @@ def add_list_of_images_to_layout(layout, images):
 def add_list_of_images_with_captions_to_layout(layout, images):
     ''' adds a list of images shown in a horizontal layout with
         caption underneath to an already existing layout'''
-    h_layout = QtGui.QHBoxLayout()
-    h_box = QtGui.QGroupBox('')
+    h_layout = QtWidgets.QHBoxLayout()
+    h_box = QtWidgets.QGroupBox('')
     for image, caption in images:
-        widget = QtGui.QWidget()
-        v_layout = QtGui.QVBoxLayout()
+        widget = QtWidgets.QWidget()
+        v_layout = QtWidgets.QVBoxLayout()
         add_image_to_layout(v_layout, image)
         add_text_to_layout(v_layout, caption)
         widget.setLayout(v_layout)
@@ -92,11 +93,11 @@ def add_list_of_images_with_captions_to_layout(layout, images):
 def add_list_of_images_with_buttons_to_layout(layout, images, parent):
     ''' adds a list of images shown in a horizontal layout with
         button underneath to an already existing layout'''
-    h_layout = QtGui.QHBoxLayout()
-    h_box = QtGui.QGroupBox('')
+    h_layout = QtWidgets.QHBoxLayout()
+    h_box = QtWidgets.QGroupBox('')
     for image, label in images:
-        widget = QtGui.QWidget()
-        v_layout = QtGui.QVBoxLayout()
+        widget = QtWidgets.QWidget()
+        v_layout = QtWidgets.QVBoxLayout()
         add_image_to_layout(v_layout, image)
         add_button(v_layout, label, parent)
         widget.setLayout(v_layout)
@@ -107,22 +108,22 @@ def add_list_of_images_with_buttons_to_layout(layout, images, parent):
 def add_list_of_buttons_to_layout(layout, button_labels, parent):
     ''' adds a list of buttons shown in a horizontal layout to an
         already existing layout'''
-    h_layout = QtGui.QHBoxLayout()
-    h_box = QtGui.QGroupBox('')
+    h_layout = QtWidgets.QHBoxLayout()
+    h_box = QtWidgets.QGroupBox('')
     for label in button_labels:
         add_button(h_layout, label, parent)
     h_box.setLayout(h_layout)
     layout.addWidget(h_box)
 
 def add_button(layout, label, parent):
-    btn = QtGui.QPushButton(label)
+    btn = QtWidgets.QPushButton(label)
     btn.clicked.connect(parent.button_clicked)
     width = btn.fontMetrics().boundingRect(label).width() + 15
     btn.setMaximumWidth(width)
     layout.addWidget(btn)
 
 
-class MyPageDialog(QtGui.QDialog):
+class MyPageDialog(QtWidgets.QDialog):
     """Creates a "complex" dialog based on a description as a "page"."""
     def __init__(self, title="title", page=None, response=None):
         super(MyPageDialog, self).__init__(None,
@@ -133,7 +134,7 @@ class MyPageDialog(QtGui.QDialog):
             raise AttributeError
         self.response = response
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         widget = create_page(page, parent=self)
         layout.addWidget(widget)
         self.setLayout(layout)
@@ -145,7 +146,7 @@ class MyPageDialog(QtGui.QDialog):
 
 
 if __name__ == '__main__':
-    app = QtGui.QApplication([])
+    app = QtWidgets.QApplication([])
     page = [("text", "This is a sample text"),
             ("image", "../ignore/images/python.jpg"),
             ("text", "More text"),

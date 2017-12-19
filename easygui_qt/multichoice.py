@@ -2,11 +2,11 @@
 
 import sys
 try:
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtGui, QtCore, QtWidgets
 except ImportError:
-    from PyQt5 import QtGui, QtCore  # untested
-
-class MultipleChoicesDialog(QtGui.QDialog):
+    print("Error importing PyQt5. Have you installed it?")
+    
+class MultipleChoicesDialog(QtWidgets.QDialog):
     """Dialog with the possibility of selecting one or more
        items from a list"""
     def __init__(self, choices=None, title="Title"):
@@ -17,30 +17,30 @@ class MultipleChoicesDialog(QtGui.QDialog):
         self.setWindowTitle(title)
         self.selection = []
 
-        main_widget = QtGui.QWidget()
-        main_layout = QtGui.QVBoxLayout()
+        main_widget = QtWidgets.QWidget()
+        main_layout = QtWidgets.QVBoxLayout()
         main_widget.setLayout(main_layout)
 
-        self.choices_widget = QtGui.QListWidget()
+        self.choices_widget = QtWidgets.QListWidget()
         self.choices_widget.setSelectionMode(
-                                    QtGui.QAbstractItemView.ExtendedSelection)
+                                    QtWidgets.QAbstractItemView.ExtendedSelection)
         for choice in choices:
-            item = QtGui.QListWidgetItem()
+            item = QtWidgets.QListWidgetItem()
             item.setText(choice)
             self.choices_widget.addItem(item)
         main_layout.addWidget(self.choices_widget)
 
-        button_box_layout = QtGui.QGridLayout()
-        selection_completed_btn = QtGui.QPushButton("Ok")
+        button_box_layout = QtWidgets.QGridLayout()
+        selection_completed_btn = QtWidgets.QPushButton("Ok")
         selection_completed_btn.clicked.connect(self.selection_completed)
-        select_all_btn = QtGui.QPushButton("Select all")
+        select_all_btn = QtWidgets.QPushButton("Select all")
         select_all_btn.clicked.connect(self.select_all)
-        clear_all_btn = QtGui.QPushButton("Clear all")
+        clear_all_btn = QtWidgets.QPushButton("Clear all")
         clear_all_btn.clicked.connect(self.clear_all)
-        cancel_btn = QtGui.QPushButton("Cancel")
+        cancel_btn = QtWidgets.QPushButton("Cancel")
         cancel_btn.clicked.connect(self.cancel)
 
-        button_box = QtGui.QWidget()
+        button_box = QtWidgets.QWidget()
         button_box_layout.addWidget(selection_completed_btn, 0, 0)
         button_box_layout.addWidget(cancel_btn, 0, 1)
         button_box_layout.addWidget(select_all_btn, 1, 0)
@@ -83,7 +83,7 @@ class MultipleChoicesDialog(QtGui.QDialog):
             super(MultipleChoicesDialog, self).keyPressEvent(e)
 
 if __name__ == '__main__':
-    app = QtGui.QApplication([])
+    app = QtWidgets.QApplication([])
     dialog = MultipleChoicesDialog()
     dialog.exec_()
     if sys.version_info < (3,):

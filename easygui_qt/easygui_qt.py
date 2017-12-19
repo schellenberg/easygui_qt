@@ -15,10 +15,9 @@ else:
     unicode = str
 
 try:
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtGui, QtCore, QtWidgets
 except ImportError:
-    from PyQt5 import QtGui, QtCore  # untested
-
+    print("Error importing PyQt5. Have you installed it?")
 
 try:
     from . import utils
@@ -71,7 +70,7 @@ __all__ = [
 QM_FILES = None
 
 
-class SimpleApp(QtGui.QApplication):
+class SimpleApp(QtWidgets.QApplication):
     """A simple extention of the basic QApplication
        with added methods useful for working with dialogs
        that are not class based.
@@ -173,7 +172,7 @@ def show_message(message="Message",
        .. image:: ../docs/images/show_message.png
     """
     app = SimpleApp()
-    box = QtGui.QMessageBox(None)
+    box = QtWidgets.QMessageBox(None)
     box.setWindowTitle(title)
     box.setText(message)
     box.show()
@@ -197,16 +196,16 @@ def get_yes_or_no(message="Answer this question", title="Title"):
        .. image:: ../docs/images/yes_no_question.png
     """
     app = SimpleApp()
-    flags = QtGui.QMessageBox.Yes | QtGui.QMessageBox.No
-    flags |= QtGui.QMessageBox.Cancel
+    flags = QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+    flags |= QtWidgets.QMessageBox.Cancel
 
-    box = QtGui.QMessageBox()
+    box = QtWidgets.QMessageBox()
     box.show()
     box.raise_()
 
     reply = box.question(None, title, message, flags)
     app.quit()
-    return reply == QtGui.QMessageBox.Yes
+    return reply == QtWidgets.QMessageBox.Yes
 
 
 def get_continue_or_cancel(message="Processed will be cancelled!",
@@ -229,16 +228,16 @@ def get_continue_or_cancel(message="Processed will be cancelled!",
        .. image:: ../docs/images/get_continue_or_cancel.png
     """
     app = SimpleApp()
-    message_box = QtGui.QMessageBox(QtGui.QMessageBox.Warning, title, message,
-                                    QtGui.QMessageBox.NoButton)
-    message_box.addButton(continue_button_text, QtGui.QMessageBox.AcceptRole)
-    message_box.addButton(cancel_button_text, QtGui.QMessageBox.RejectRole)
+    message_box = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, title, message,
+                                    QtWidgets.QMessageBox.NoButton)
+    message_box.addButton(continue_button_text, QtWidgets.QMessageBox.AcceptRole)
+    message_box.addButton(cancel_button_text, QtWidgets.QMessageBox.RejectRole)
     message_box.show()
     message_box.raise_()
 
     reply = message_box.exec_()
     app.quit()
-    return reply == QtGui.QMessageBox.AcceptRole
+    return reply == QtWidgets.QMessageBox.AcceptRole
 
 
 #============= Color dialogs =================
@@ -253,7 +252,7 @@ def get_color_hex():
        .. image:: ../docs/images/select_color.png
        """
     app = SimpleApp()
-    color = QtGui.QColorDialog.getColor(QtCore.Qt.white, None)
+    color = QtWidgets.QColorDialog.getColor(QtCore.Qt.white, None)
     app.quit()
     if color.isValid():
         return color.name()
@@ -269,7 +268,7 @@ def get_color_rgb(app=None):
        .. image:: ../docs/images/select_color_fr.png
        """
     app = SimpleApp()
-    color = QtGui.QColorDialog.getColor(QtCore.Qt.white, None)
+    color = QtWidgets.QColorDialog.getColor(QtCore.Qt.white, None)
     app.quit()
     if color.isValid():
         return (color.red(), color.green(), color.blue())
@@ -358,7 +357,7 @@ def get_common_input_flags():
     flags |= QtCore.Qt.WindowStaysOnTopHint
     return flags
 
-class VisibleInputDialog(QtGui.QInputDialog):
+class VisibleInputDialog(QtWidgets.QInputDialog):
     '''A simple InputDialog class that attempts to make itself automatically
        on all platforms
     '''
@@ -412,7 +411,7 @@ def get_int(message="Choose a number", title="Title",
     app = SimpleApp()
     dialog = VisibleInputDialog()
     flags = get_common_input_flags()
-    number, ok = dialog.getInteger(None, title, message,
+    number, ok = dialog.getInt(None, title, message,
                                    default_value, min_, max_, step,
                                    flags)
     dialog.destroy()
@@ -487,7 +486,7 @@ def get_string(message="Enter your response", title="Title",
     app = SimpleApp()
     dialog = VisibleInputDialog()
     flags = get_common_input_flags()
-    text, ok = dialog.getText(None, title, message, QtGui.QLineEdit.Normal,
+    text, ok = dialog.getText(None, title, message, QtWidgets.QLineEdit.Normal,
                               default_response, flags)
     app.quit()
     if ok:
@@ -514,7 +513,7 @@ def get_password(message="Enter your password", title="Title"):
     app = SimpleApp()
     dialog = VisibleInputDialog()
     flags = get_common_input_flags()
-    text, ok = dialog.getText(None, title, message, QtGui.QLineEdit.Password,
+    text, ok = dialog.getText(None, title, message, QtWidgets.QLineEdit.Password,
                               '', flags)
     app.quit()
     if ok:
@@ -702,13 +701,13 @@ def get_directory_name(title="Get directory"):
        working directory.
     '''
     app = SimpleApp()
-    options = QtGui.QFileDialog.Options()
+    options = QtWidgets.QFileDialog.Options()
     # Without the following option (i.e. using native dialogs),
     # calling this function twice in a row made Python crash.
-    options |= QtGui.QFileDialog.DontUseNativeDialog
-    options |= QtGui.QFileDialog.DontResolveSymlinks
-    options |= QtGui.QFileDialog.ShowDirsOnly
-    directory = QtGui.QFileDialog.getExistingDirectory(None,
+    options |= QtWidgets.QFileDialog.DontUseNativeDialog
+    options |= QtWidgets.QFileDialog.DontResolveSymlinks
+    options |= QtWidgets.QFileDialog.ShowDirsOnly
+    directory = QtWidgets.QFileDialog.getExistingDirectory(None,
                                             title, os.getcwd(), options)
     app.quit()
     if sys.version_info < (3,):
@@ -733,14 +732,14 @@ def get_file_names(title="Get existing file names"):
     '''
     app = SimpleApp()
     if sys.version_info < (3,):
-        files = QtGui.QFileDialog.getOpenFileNames(None, title, os.getcwd(),
+        files = QtWidgets.QFileDialog.getOpenFileNames(None, title, os.getcwd(),
                                                "All Files (*.*)")
         files = [unicode(item) for item in files]
     else:
-        options = QtGui.QFileDialog.Options()
-        options |= QtGui.QFileDialog.DontUseNativeDialog
-        files = QtGui.QFileDialog.getOpenFileNames(None, title, os.getcwd(),
-                                               "All Files (*.*)", options)
+        #options = QtWidgets.QFileDialog.Options()
+        #options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        files = QtWidgets.QFileDialog.getOpenFileNames(None, title, os.getcwd(),
+                                               "All Files (*.*)")#, options)
     app.quit()
     return files
 
@@ -765,15 +764,15 @@ def get_save_file_name(title="File name to save"):
     '''
     app = SimpleApp()
     if sys.version_info < (3,):
-        file_name = QtGui.QFileDialog.getSaveFileName(None, title, os.getcwd(),
+        file_name = QtWidgets.QFileDialog.getSaveFileName(None, title, os.getcwd(),
                                                "All Files (*.*)")
         app.quit()
         return unicode(file_name)
 
-    options = QtGui.QFileDialog.Options()
-    options |= QtGui.QFileDialog.DontUseNativeDialog  # see get_directory_name
-    file_name = QtGui.QFileDialog.getSaveFileName(None, title, os.getcwd(),
-                                               "All Files (*.*)", options)
+    #options = QtWidgets.QFileDialog.Options()
+    #options |= QtWidgets.QFileDialog.DontUseNativeDialog  # see get_directory_name
+    file_name = QtWidgets.QFileDialog.getSaveFileName(None, title, os.getcwd(),
+                                               "All Files (*.*)")#, options)
     app.quit()
     return file_name
 
@@ -899,9 +898,9 @@ def get_abort(message="Major problem - or at least we think there is one...",
     '''
 
     app = SimpleApp()
-    reply = QtGui.QMessageBox.critical(None, title, message,
-            QtGui.QMessageBox.Abort | QtGui.QMessageBox.Ignore)
-    if reply == QtGui.QMessageBox.Abort:
+    reply = QtWidgets.QMessageBox.critical(None, title, message,
+            QtWidgets.QMessageBox.Abort | QtWidgets.QMessageBox.Ignore)
+    if reply == QtWidgets.QMessageBox.Abort:
         sys.exit()
     else:
         pass
