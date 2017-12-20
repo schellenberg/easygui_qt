@@ -20,20 +20,20 @@ test_requirements = [
 ]
 
 setup(
-    name='easygui_qt',
-    version='0.9.2',
+    name='cs20-gui',
+    version='0.9.3',
     description='"Inspired by EasyGUI, designed for PyQt"',
     long_description=readme + '\n\n' + history,
     author='André Roberge',
     author_email='andre.roberge@gmail.com',
-    url='https://github.com/aroberge/easygui_qt',
+    url='https://github.com/schellenberg/easygui_qt',
     packages=[
         'easygui_qt', 'easygui_qt.demos'
     ],
     package_dir={'easygui_qt':
                  'easygui_qt'},
     include_package_data=True,
-    install_requires='',
+    install_requires=['sip', 'PyQt5'],
     license="BSD",
     zip_safe=False,
     keywords='easygui_qt',
