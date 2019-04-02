@@ -3,6 +3,28 @@
 History
 =======
 
+0.9.6
+-----
+
+Changes by Dan Schellenberg:
+- made show_file, show_html, etc read only
+- add mode argument to get_color_rgb, so the default can work with Python's turtle module
+
+0.9.5
+-----
+
+Changes by Dan Schellenberg:
+- added a get_file_name function, so students do not need to worry about
+  extracting the path from a list when choosing a single file
+
+0.9.3
+-----
+
+Changes by Dan Schellenberg:
+- set PyQt5 as a dependency so pip autoinstalls it
+  This means that a student using an IDE such as Thonny can install a single package
+
+
 0.9.2
 -----
 

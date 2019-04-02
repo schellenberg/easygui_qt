@@ -53,13 +53,14 @@ __all__ = [
     'get_date',
     'get_directory_name',
     'get_file_names',
+    'get_file_name',
     'get_save_file_name',
     'handle_exception',
     'set_font_size',
     'get_language',
     'set_language',
     'get_abort',
-    'show_message',    
+    'show_message',
     'show_file',
     'show_text',
     'show_code',
@@ -257,9 +258,10 @@ def get_color_hex():
     if color.isValid():
         return color.name()
 
-def get_color_rgb(app=None):
+def get_color_rgb(title="Choose a color", mode=1, app=None):
     """Using a color dialog, returns a color in rgb notation
        i.e. a tuple (r, g, b)  or "None" if color dialog is dismissed.
+       Mode can be either 1 (default, same as Python turtle module), or 255.
 
        >>> import easygui_qt as easy
        >>> easy.set_language('fr')
@@ -268,10 +270,13 @@ def get_color_rgb(app=None):
        .. image:: ../docs/images/select_color_fr.png
        """
     app = SimpleApp()
-    color = QtWidgets.QColorDialog.getColor(QtCore.Qt.white, None)
+    color = QtWidgets.QColorDialog.getColor(QtCore.Qt.white, None, title)
     app.quit()
     if color.isValid():
-        return (color.red(), color.green(), color.blue())
+        if mode == 1:
+            return (color.red()/255, color.green()/255, color.blue()/255)
+        elif mode == 255:
+            return (color.red(), color.green(), color.blue())
 
 #================ Date ===================
 
@@ -743,6 +748,31 @@ def get_file_names(title="Get existing file names"):
     app.quit()
     return files
 
+def get_file_name(title="Get existing file name"):
+    '''Gets the name (full path) of an existing file
+
+       :param title: Window title
+       :return: the string (path) of the file selected.
+
+       >>> import easygui_qt as easy
+       >>> easy.get_file_name()
+
+       .. image:: ../docs/images/get_file_name.png
+
+       By default, this dialog initially displays the content of the current
+       working directory.
+    '''
+    app = SimpleApp()
+    if sys.version_info < (3,):
+        file = QtWidgets.QFileDialog.getOpenFileName(None, title, os.getcwd(),
+                                               "All Files (*.*)")[0]
+    else:
+        #options = QtWidgets.QFileDialog.Options()
+        #options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file = QtWidgets.QFileDialog.getOpenFileName(None, title, os.getcwd(),
+                                               "All Files (*.*)")[0]
+    app.quit()
+    return file
 
 def get_save_file_name(title="File name to save"):
     '''Gets the name (full path) of of a file to be saved.
@@ -826,7 +856,7 @@ def show_file(file_name=None, title="Title", file_type="text"):
     editor.show()
     app.exec_()
 
-    
+
 def show_text(title="Title", text=""):
     '''Displays some text in a window.
 
@@ -844,7 +874,7 @@ def show_text(title="Title", text=""):
     editor.show()
     app.exec_()
 
-    
+
 def show_code(title="Title", text=""):
     '''Displays some text in a window, in a monospace font.
 
@@ -862,7 +892,7 @@ def show_code(title="Title", text=""):
     editor.show()
     app.exec_()
 
-    
+
 def show_html(title="Title", text=""):
     '''Displays some html text in a window.
 
@@ -880,7 +910,7 @@ def show_html(title="Title", text=""):
     editor.show()
     app.exec_()
 
-    
+
 def get_abort(message="Major problem - or at least we think there is one...",
               title="Major problem encountered!"):
     '''Displays a message about a problem.

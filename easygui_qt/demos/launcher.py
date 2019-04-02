@@ -14,7 +14,7 @@ try:
     from PyQt5 import QtGui, QtCore, QtWidgets
 except ImportError:
     print("Error importing PyQt5. Have you installed it?")\
-                 
+
 def launch(name, *args):
     """Executes a script designed specifically for this launcher.
 
@@ -66,7 +66,7 @@ class Dialog(QtWidgets.QDialog):
                 'get_choice', 'get_list_of_choices',
                 'get_yes_or_no', 'get_continue_or_cancel',
                 'get_color_hex', 'get_color_rgb',
-                'get_date', 'get_directory_name',
+                'get_date', 'get_directory_name', 'get_file_name',
                 'get_file_names', 'get_save_file_name',
                 'get_language', 'set_font_size',
                 'show_file', 'show_code', 'get_abort', 'find_help']
@@ -185,6 +185,10 @@ class Dialog(QtWidgets.QDialog):
         self.label['get_file_names'].setText("{}".format(output))
         self.label['get_file_names'].setWordWrap(True)
         self.adjustSize()
+
+    def get_file_name(self):
+        output = launch('get_file_name')
+        self.label['get_file_name'].setText("{}".format(output))
 
     def get_save_file_name(self):
         output = launch('get_save_file_name')

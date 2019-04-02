@@ -32,6 +32,7 @@ class TextWindow(QtWidgets.QMainWindow):
         self.setWindowTitle(title)
         self.resize(900, 600)
         self.editor = QtWidgets.QTextEdit(self)
+        self.editor.setReadOnly(True)
         self.setCentralWidget(self.editor)
         self.editor.setFocus()
 

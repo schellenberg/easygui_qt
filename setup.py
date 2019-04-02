@@ -20,8 +20,8 @@ test_requirements = [
 ]
 
 setup(
-    name='cs20-gui',
-    version='0.9.3',
+    name='cs20-easygui',
+    version='0.9.5',
     description='"Inspired by EasyGUI, designed for PyQt"',
     long_description=readme + '\n\n' + history,
     author='André Roberge',
