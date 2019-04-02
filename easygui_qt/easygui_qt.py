@@ -628,12 +628,13 @@ def get_new_password(title="Title", labels=None):
     app.quit()
     return parent.o_dict
 
-def get_many_strings(title="Title", labels=None, masks=None):
+def get_many_strings(title="Title", labels=None, masks=None, mode="list"):
     """Multiple strings input
 
        :param title: Window title
        :param labels: an iterable containing the labels for to use for the entries
        :param masks: optional parameter.
+       :param mode: options are 'list' (default) or 'dict'. Controls the data type that is returned.
 
 
        :return: An ordered dict containing the labels as keys, and
@@ -652,7 +653,7 @@ def get_many_strings(title="Title", labels=None, masks=None):
        >>> masks = [False, True]
        >>> reply = easy.get_many_strings(labels=labels, masks=masks)
        >>> reply
-       OrderedDict([('User name', 'aroberge'), ('Password', 'not a good password')])
+            ['aroberge', 'not a good password']
 
        .. image:: ../docs/images/get_many_strings.png
     """
@@ -664,7 +665,11 @@ def get_many_strings(title="Title", labels=None, masks=None):
                                               parent=parent, title=title)
     dialog.exec_()
     app.quit()
-    return parent.o_dict
+    if mode == "list":
+        values = list(parent.o_dict.values())
+        return values
+    elif mode == "dict":
+        return parent.o_dict
 
 def get_list_of_choices(title="Title", choices=None):
     """Show a list of possible choices to be selected.

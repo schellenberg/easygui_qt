@@ -9,6 +9,7 @@ History
 Changes by Dan Schellenberg:
 - made show_file, show_html, etc read only
 - add mode argument to get_color_rgb, so the default can work with Python's turtle module
+- add mode argument to get_many_strings, so the default returns a list instead of a dict (since a beginner may not yet understand the dict data type)
 
 0.9.5
 -----
